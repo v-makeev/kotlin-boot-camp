@@ -48,7 +48,7 @@ class Bar(firstCornerX: Int, firstCornerY: Int, secondCornerX: Int, secondCorner
         return false
     }
 
-    fun isInBar(point: Point) :Boolean {
+    fun isInBar(point: Point): Boolean {
         return ((leftLowerX - point.x) * (rightUpperX - point.x) <= 0) and
                 ((leftLowerY - point.y) * (rightUpperY - point.y) <= 0)
     }
