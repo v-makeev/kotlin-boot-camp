@@ -5,10 +5,10 @@
 <body>
 <div id="header">
     <form method="POST" id="nameform" class="button" action="javascript:void(null);">
-        <input id="name" name="name" value="" style="font-size:medium" type="text">
-        <input value="Login" style="font-size:large" type="submit" onclick="login()">
+        <input id="name" name="name" value="" style="font-size:medium" type="text" >
+        <input value="Login" style="font-size:large" type="submit"  onclick="login()">
     </form>
-    <form method="POST" id="nanaa" action="javascript:void(null);" onsubmit="logout()">
+    <form method="POST" id="nanaa"  action="javascript:void(null);" onsubmit="logout()">
         <input id="log" value="Logout" class="button" style="font-size:large" type="submit">
     </form>
 
@@ -32,7 +32,6 @@
     var port = 8080;
     var logged = "";
     $('#nanaa').hide();
-
     function check(name) {
         var settings = {
             "crossDomain": true,
@@ -61,7 +60,6 @@
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
     }
-
     function loadOnline() {
         var settings = {
             "crossDomain": true,
@@ -75,7 +73,6 @@
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
     }
-
     function say() {
         var msg = $('#msgform').serialize();
         //var name = $('#nameform').serialize();
@@ -94,9 +91,7 @@
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
     }
-
-    function login() {
-        1
+    function login() {1
         var name = $('#nameform').serialize();
         console.log(logged);
         if (logged !== "")
@@ -122,7 +117,6 @@
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
     }
-
     function logout() {
         //var name = $('#nameform').serialize();
         var name = logged;
@@ -146,7 +140,6 @@
         logged = "";
         localStorage.removeItem("login");
     }
-
     window.onload = function load() {
         if (localStorage.length !== 0 && check(localStorage.getItem("login"))) {
             logged = localStorage.getItem("login");

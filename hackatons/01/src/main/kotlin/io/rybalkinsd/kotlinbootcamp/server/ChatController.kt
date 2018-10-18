@@ -60,11 +60,11 @@ class ChatController {
      * curl -X POST -i localhost:8080/chat/logout -d "name=MY_NAME"
      */
     @RequestMapping(
-        path = ["logout"],
-        method = [RequestMethod.POST],
-        produces = [MediaType.TEXT_PLAIN_VALUE]
+            path = ["logout"],
+            method = [RequestMethod.POST],
+            produces = [MediaType.TEXT_PLAIN_VALUE]
     )
-    fun delete(@RequestParam("name")name: String): ResponseEntity<String> = when {
+    fun delete(@RequestParam("name") name: String): ResponseEntity<String> = when {
         name.isEmpty() -> ResponseEntity.badRequest().body("Name is empty")
         name !in usersOnline.keys -> ResponseEntity.badRequest().body("Not logged")
         else -> {
@@ -82,7 +82,7 @@ class ChatController {
             method = [RequestMethod.POST],
             produces = [MediaType.TEXT_PLAIN_VALUE]
     )
-    fun say(@RequestParam("name")name: String, @RequestParam("msg")msg: String): ResponseEntity<String> = when {
+    fun say(@RequestParam("name") name: String, @RequestParam("msg") msg: String): ResponseEntity<String> = when {
         name.isEmpty() -> ResponseEntity.badRequest().body("User not online")
         name !in usersOnline.keys -> ResponseEntity.badRequest().body("User not online")
         msg.isEmpty() -> ResponseEntity.ok().build()
