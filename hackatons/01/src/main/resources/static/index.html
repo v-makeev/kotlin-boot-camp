@@ -4,13 +4,18 @@
 <html>
 <body>
 <div id="header">
-    <form method="POST" id="nameform" action="javascript:void(null);" onsubmit="login()">
-        <input id="name" name="name" value="" style="font-size:medium" type="text">
-        <input value="Login" style="font-size:large" type="submit">
+    <form method="POST" id="nameform" class="button" action="javascript:void(null);">
+        <input id="name" name="name" value="" style="font-size:medium" type="text" >
+        <input value="Login" style="font-size:large" type="submit"  onclick="login()">
     </form>
+    <form method="POST" id="nanaa"  action="javascript:void(null);" onsubmit="logout()">
+        <input id="log" value="Logout" class="button" style="font-size:large" type="submit">
+    </form>
+
 </div>
 <div id="body">
     <div id="history" class="chat form"></div>
+    <div id="online" class="online form"></div>
 </div>
 <div id="footer">
     <form method="POST" id="msgform" action="javascript:void(null);" onsubmit="say()">
@@ -25,34 +30,59 @@
 <script>
     var host = "localhost";
     var port = 8080;
-
+    var logged = "";
+    $('#nanaa').hide();
+    function check(name) {
+        var settings = {
+            "crossDomain": true,
+            "url": "http://" + host + ":" + port + "/chat/check",
+            "method": "GET",
+            "data": name
+        };
+        $.ajax(settings).done(function () {
+            return 1;
+        }).fail(function () {
+            return 0;
+        });
+    }
 
     function loadHistory() {
         var settings = {
             "crossDomain": true,
             "url": "http://" + host + ":" + port + "/chat/history",
-            "method": "GET",
-        }
-
+            "method": "GET"
+        };
         $.ajax(settings).done(function (response) {
+            console.log(response);
             $("#history").html(response.replace(/\n/g, "<br />"))
             $("#history").scrollTop($("#history")[0].scrollHeight);
         }).fail(function (jqXHR, textStatus) {
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
     }
-
+    function loadOnline() {
+        var settings = {
+            "crossDomain": true,
+            "url": "http://" + host + ":" + port + "/chat/online",
+            "method": "GET",
+        }
+        $.ajax(settings).done(function (response) {
+            $("#online").html(response.replace(/\n/g, "<br />"))
+            $("#online").scrollTop($("#online")[0].scrollHeight);
+        }).fail(function (jqXHR, textStatus) {
+            console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+        });
+    }
     function say() {
         var msg = $('#msgform').serialize();
-        var name = $('#nameform').serialize();
-
+        //var name = $('#nameform').serialize();
+        var name = logged;
         var settings = {
             "method": "POST",
             "crossDomain": true,
             "url": "http://" + host + ":" + port + "/chat/say",
             "data": name + "&" + msg
         };
-
         $.ajax(settings).done(function (response) {
             $('#msgform').trigger("reset");
             loadHistory();
@@ -61,9 +91,11 @@
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
     }
-
-    function login() {
+    function login() {1
         var name = $('#nameform').serialize();
+        console.log(logged);
+        if (logged !== "")
+            return;
 
         var settings = {
             "method": "POST",
@@ -73,13 +105,55 @@
         };
 
         $.ajax(settings).done(function (response) {
+            $('#nameform').hide();
+            $('#nanaa').show();
+            var b = document.getElementById("log");
+            b.value = "Logout: " + name.split("=")[1];
+            logged = name;
+            localStorage.setItem("login", logged);
             loadHistory();
         }).fail(function (jqXHR, textStatus) {
             alert(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
     }
+    function logout() {
+        //var name = $('#nameform').serialize();
+        var name = logged;
+        if (name === "")
+            return;
+        var settings = {
+            "method": "POST",
+            "crossDomain": true,
+            "url": "http://" + host + ":" + port + "/chat/logout",
+            "data": name
+        };
+        $.ajax(settings).done(function (response) {
+            $('#nameform').show();
+            $('#nanaa').hide();
+            loadHistory();
+        }).fail(function (jqXHR, textStatus) {
+            alert(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+            console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
 
+        });
+        logged = "";
+        localStorage.removeItem("login");
+    }
+    window.onload = function load() {
+        if (localStorage.length !== 0 && check(localStorage.getItem("login"))) {
+            logged = localStorage.getItem("login");
+            var b = document.getElementById("log");
+            b.value = "Logout: " + name.split("=")[1];
+            logged = name;
+            $('#nameform').hide();
+            $('#nanaa').show();
+        } else {
+            logged = ""
+        }
+    };
     loadHistory();
-    setInterval(loadHistory, 10000);
+    loadOnline();
+    setInterval(loadOnline, 1000);
+    setInterval(loadHistory, 1000);
 </script>
