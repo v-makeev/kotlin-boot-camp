@@ -23,8 +23,8 @@ class UserDaoTest {
             addLogger(StdOutSqlLogger)
 
             val id = Users.insert {
-                it[id] = 44
-                it[login] = "login44"
+                it[id] = 42
+                it[login] = "login42"
             } get Users.id
 
             println(id)

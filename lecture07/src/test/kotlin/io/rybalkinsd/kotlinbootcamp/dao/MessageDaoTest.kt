@@ -11,7 +11,7 @@ import org.junit.Test
 class MessageDaoTest {
 
     @Test
-    fun `add massage`() {
+    fun `add message`() {
         DbConnector
 
         transaction {
@@ -21,7 +21,7 @@ class MessageDaoTest {
                 it[id] = 0
                 it[user] = 42
                 it[time] = DateTime.now()
-                it[value] = "My first message"
+                it[content] = "My first message"
             }
         }
     }

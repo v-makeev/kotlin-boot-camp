@@ -9,9 +9,9 @@ object DbConnector {
 
     private val host = "54.224.37.210"
     private val port = 5432
-    private val dbName = "chatdb_atom49"
-    private val user = "atom49"
-    private val password = "atom49"
+    private val dbName = "chatdb_atom17"
+    private val user = "atom17"
+    private val password = "atom17"
 
     init {
         Database.connect(

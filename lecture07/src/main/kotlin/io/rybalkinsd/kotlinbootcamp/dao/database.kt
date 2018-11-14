@@ -11,5 +11,5 @@ object Messages : Table("chat.message") {
     val id = integer("id").autoIncrement().primaryKey()
     val user = integer("user") references Users.id
     val time = datetime("time")
-    val value = text("value")
+    val content = text("value")
 }
